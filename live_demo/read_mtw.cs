@@ -34,10 +34,9 @@ public class read_mtw : MonoBehaviour {
     // settings for master
     public int RadioChannel = 11;
     public int Hz = 60;  // max Hz for 1 to 5 sensors: 120, max Hz for 6 sensors: 100
-    public bool UseHeadSensorAsInput = true;
-
+    
     // storing data per connected MTw
-    private Dictionary<XsDevice, MyMtCallback> _measuringMts = new Dictionary<XsDevice, MyMtCallback>();
+    private Dictionary<XsDevice, MyMtwCallback> _measuringMts = new Dictionary<XsDevice, MyMtwCallback>();
     private Dictionary<uint, XsIMUMeasurement> _connectedMtwData = new Dictionary<uint, XsIMUMeasurement>();
     private Dictionary<uint, string> _imuIdToName = new Dictionary<uint, string>();
     private Dictionary<uint, string> _imuIdToBoneName = new Dictionary<uint, string>();
@@ -49,12 +48,11 @@ public class read_mtw : MonoBehaviour {
     private static uint _rArmId = 11809024;  // right upper arm sensor
     private static uint _lLegId = 11808713;  // left lower leg sensor 
     private static uint _rLegId = 11808755;  // right lower leg sensor
-    private static uint _sternumId = 11808865;
     private static uint _pelvisId = 11808759;
 
     // model expects sensors in order l_elbow, r_elbow, l_knee, r_knee, sternum, pelvis
     // sensors used here are: 
-    private List<uint> _imuOrder = new List<uint> { _lArmId, _rArmId, _lLegId, _rLegId, _sternumId, _pelvisId };
+    private List<uint> _imuOrder = new List<uint> { _lArmId, _rArmId, _lLegId, _rLegId, _headId, _pelvisId };
     
     // the current SMPL mesh
     private SkinnedMeshRenderer _meshRenderer;
@@ -86,19 +84,12 @@ public class read_mtw : MonoBehaviour {
         _poseUpdater = new SMPLPoseUpdater(this.transform);
         _client = new Client();
 
-        // replace sternum sensor with head, if head is to be used as input
-        if (UseHeadSensorAsInput) {
-            _imuOrder[4] = _headId;
-            UnityEngine.Debug.Log("Using HEAD sensor as input.");
-        }
-
         // must match the name of the object in the scene
         _imuIdToName.Add(_rArmId, "r_arm");
         _imuIdToName.Add(_rLegId, "r_leg");
         _imuIdToName.Add(_lArmId, "l_arm");
         _imuIdToName.Add(_lLegId, "l_leg");
         _imuIdToName.Add(_pelvisId, "pelvis");
-        _imuIdToName.Add(_sternumId, "sternum");
         _imuIdToName.Add(_headId, "head");
 
         // must match name in definition of SMPL model
@@ -107,7 +98,6 @@ public class read_mtw : MonoBehaviour {
         _imuIdToBoneName.Add(_lArmId, "L_Elbow");
         _imuIdToBoneName.Add(_lLegId, "L_Knee");
         _imuIdToBoneName.Add(_pelvisId, "Pelvis");
-        _imuIdToBoneName.Add(_sternumId, "Spine3");
         _imuIdToBoneName.Add(_headId, "Head");
 
         // to determine location where to display IMU sensors
@@ -116,7 +106,6 @@ public class read_mtw : MonoBehaviour {
         _imuIdToVertex.Add(_lArmId, 1962);  // left arm
         _imuIdToVertex.Add(_lLegId, 1096);  // left leg
         _imuIdToVertex.Add(_pelvisId, 3021);  // pelvis
-        _imuIdToVertex.Add(_sternumId, 3065);  // sternum
         _imuIdToVertex.Add(_headId, 412);
 
         // intialize control object that handles communication to XSens device
@@ -129,7 +118,7 @@ public class read_mtw : MonoBehaviour {
         EnableRadio();
         _totalConnectedMTWs = _masterDevice.childCount();
 
-        UnityEngine.Debug.Log("Waiting for MTWs to connect to the master.\nPress Y to stop waiting and to start measurements with the connected MTws.");
+        UnityEngine.Debug.Log("Waiting for MTWs to connect to the master.");
 
         // connect to inference server
         _client.ConnectToTcpServer();
@@ -250,7 +239,7 @@ public class read_mtw : MonoBehaviour {
             for (uint i = 0; i < deviceIds.size(); i++) {
 
                 XsDevice mtw = new XsDevice(deviceIds.at(i));
-                MyMtCallback callback = new MyMtCallback();
+                MyMtwCallback callback = new MyMtwCallback();
                 uint deviceId = mtw.deviceId().toInt();
 
                 if (_imuOrder.Contains(deviceId)) {
@@ -372,7 +361,7 @@ public class read_mtw : MonoBehaviour {
         }
 
         // this should only be called after a few seconds after entering measuring mode
-        foreach (KeyValuePair<XsDevice, MyMtCallback> data in _measuringMts) {
+        foreach (KeyValuePair<XsDevice, MyMtwCallback> data in _measuringMts) {
             if (!data.Key.resetOrientation(XsResetMethod.XRM_Heading)) {
                 throw new UnityException("could not reset sensor " + data.Key.deviceId());
             }

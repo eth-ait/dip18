@@ -56,9 +56,6 @@ public class XsIMUMeasurement {
     // Gravity in inertial frame
     private Vector3 _gravityZ;
 
-    // List to record all the data
-    public List<XsIMURecording> buffer = new List<XsIMURecording>();
-
     private int _lastPacketId = -1;
 
     public XsIMUMeasurement() : this(null, new Vector3(0.0f, 0.0f, 0.0f)){ }
