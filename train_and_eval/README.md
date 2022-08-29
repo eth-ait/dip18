@@ -2,7 +2,7 @@
 Code for training of new and evaluation of existing models. 
 
 # Prerequisites
-It requires that you download the data from [(coming soon)](#).
+It requires that you download the data from the [project page](https://dip.is.tue.mpg.de/download.php).
 
 The code was tested with TensorFlow 1.4.0, but it should be able to run in newer versions as well. Set up your environment as follows (assuming that correct CUDA and cuDNN versions are installed):
 
@@ -18,7 +18,7 @@ conda install numba
 Next, make sure to update the path to where you stored the data (`*.npz` files) under `Configuration.KNOWN_DATA_PATHS` in `configuration.py`. The keys in that dictionary can be selected through the `--system` flag, so that you can run the code on different machines.
 
 # Pre-Trained Models
-With this code, we also release some pre-trained models on the [project page](http://dip.is.tue.mpg.de/pre_download). Unzip the downloaded file and store it under `./models` so that the evaluation code can make use of it. The zip file contains the following models:
+With this code, we also release some pre-trained models on the [project page](https://dip.is.tue.mpg.de/download.php). Unzip the downloaded file and store it under `./models` so that the evaluation code can make use of it. The zip file contains the following models:
 
 - ID `1527876409`: The best BiRNN as reported in the paper (using dropout and acceleration loss)
 - ID `1528208085`: The best BiRNN fine-tuned on DIP-IMU.
