@@ -2,6 +2,8 @@
 ## Code
 This repository contains the code published alongside with our SIGGRAPH Asia [paper](http://dip.is.tuebingen.mpg.de/assets/dip.pdf). It is organised as follows: [`train_and_eval`](train_and_eval) contains code to train and evaluate the neural networks proposed in the paper. [`live_demo`](live_demo) contains Unity and Python scripts to use the models for real-time inference. [`data_synthesis`](data_synthesis) contains a script to produce synthetic IMU measurements from SMPL sequences. Please refer to the READMEs in the respective subfolder for more details.
 
+***If you are looking for the code to preprocess TotalCapture dataset, please check the newly uploaded read_TC_data.py.***
+
 ## Data
 To download the data please visit the [project page](http://dip.is.tuebingen.mpg.de).
 
