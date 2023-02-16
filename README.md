@@ -5,7 +5,7 @@ This repository contains the code published alongside with our SIGGRAPH Asia [pa
 ***Please check read_TC_data.py if you want to get TotalCapture pre-processed for this repo.***
 
 ## Data
-To download the data please visit the [project page](http://dip.is.tuebingen.mpg.de).
+To download the data please visit the [project page](http://dip.is.tuebingen.mpg.de). From this page you can also download the SMPL reference parameters for the TotalCapture dataset.
 
 # Contact Information
 For questions or problems please file an issue or contact [manuel.kaufmann@inf.ethz.ch](mailto:manuel.kaufmann@inf.ethz.ch) or [yinghao.huang@tuebingen.mpg.de](mailto:yinghao.huang@tuebingen.mpg.de).
